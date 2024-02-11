@@ -28,8 +28,7 @@ client.on("messageCreate", async (message) => {
     if (message.channel.id == config.canal && message.attachments) {
         message.attachments.map(async file => {
             if (file.contentType !== 'application/zip') return message.reply('O arquivo deve esta em formato ZIP')
-            var urlFile = file.url.split('?')[0]
-            await executeCommand(`wget -P /var/www/html/${config.domain}/${message.author.username} ${urlFile}`);
+            await executeCommand(`curl -o /var/www/html/${config.domain}/${message.author.username}/${file.name} ${file.url}`);
             await executeCommand(`unzip -o /var/www/html/${config.domain}/${message.author.username}/${file.name} -d /var/www/html/${config.domain}/${message.author.username}`);
             await executeCommand(`rm /var/www/html/${config.domain}/${message.author.username}/${file.name}`);
             message.channel.send(`${file.name} upado com sucesso!\nURL: https://${config.domain}/${message.author.username}`)
